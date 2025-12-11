@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
   int dia;
@@ -12,19 +13,21 @@ typedef struct {
 } td_hora;
 
 typedef struct {
-  
+  char rp[50];
+  char nome [100];
+  td_data ingresso;
+  void * disciplinas;
+  char email[100];
 } td_professor;
-
 
 typedef struct {
   char codigo_dis[50];
-  char disciplina [100];
+  char nome[100];
   void* alunos;
+  td_professor * professor;
 } td_disciplina;
 
-size_t size_disciplinas = 10;
-size_t indexDisciplina = 0;
-td_disciplina* disciplinas = NULL; // Define um vetor disciplinas dinâmico
+#define conv_disciplina(pnt_dis) ((td_disciplina *) pnt_dis) 
 
 typedef struct {
   td_disciplina* disciplina; 
@@ -38,11 +41,7 @@ typedef struct {
   td_data ingresso; 
   td_matricula * disciplinas; 
   char email [100];
-} td_aluno; 
-
-size_t size_alunos = 10;
-size_t indexAlunos = 0;
-td_aluno* alunos = NULL; 
+} td_aluno;
 
 typedef struct {
   td_aluno aluno;
@@ -52,6 +51,19 @@ typedef struct {
 } td_compromisso;
 
 int main() {
-  printf("Hello");
+  td_professor professor;
+  strcpy(professor.nome, "Silva");
+  strcpy(professor.rp, "268043");
+
+  td_disciplina disciplina;
+  strcpy(disciplina.codigo_dis, "20913");
+  strcpy(disciplina.nome, "História africana no Brasil");
+  disciplina.professor = &professor;
+
+  professor.disciplinas = &disciplina;
+
+  printf("%s\n", conv_disciplina(professor.disciplinas)->nome);
+  printf("%s", conv_disciplina(&disciplina)->nome);
+
   return 0;
 } 
